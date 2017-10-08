@@ -1,4 +1,6 @@
 ﻿using BabySchedule.Panels.Views;
+using TcpConnect;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BabySchedule.Panels
@@ -11,8 +13,8 @@ namespace BabySchedule.Panels
         protected override void Awake()
         {
             base.Awake();
-            _diaperBtn = transform.Find("DiaperButton").GetComponent<Button>();
-            _eatBtn = transform.Find("EatButton").GetComponent<Button>();
+            _diaperBtn = transform.Find("Bottom/DiaperButton").GetComponent<Button>();
+            _eatBtn = transform.Find("Bottom/EatButton").GetComponent<Button>();
 
             _diaperBtn.onClick.AddListener(DiaperBtnClicked);
             _eatBtn.onClick.AddListener(EatBtnClicked);

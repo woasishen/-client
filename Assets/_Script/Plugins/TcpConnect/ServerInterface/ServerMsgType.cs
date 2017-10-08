@@ -53,21 +53,21 @@ namespace TcpConnect.ServerInterface
         [ServerId(ServerMsgId.get_eats)]
         public class GetEats : ServerMsgBase
         {
-            /// <summary>
-            /// Data
-            /// </summary>
+            [JsonProperty(@"start")]
+            public int Start { get; private set; }
+
             [JsonProperty(@"data")]
-            public Stack<Eat> Eats { get; private set; }
+            public Cache<Eat> Eats { get; private set; }
         }
 
         [ServerId(ServerMsgId.get_diapers)]
         public class GetDiapers : ServerMsgBase
         {
-            /// <summary>
-            /// Data
-            /// </summary>
+            [JsonProperty(@"start")]
+            public int Start { get; private set; }
+
             [JsonProperty(@"data")]
-            public Stack<Diaper> Diapers { get; private set; }
+            public Cache<Diaper> Diapers { get; private set; }
         }
     }
 
@@ -76,8 +76,8 @@ namespace TcpConnect.ServerInterface
         [ServerId(ServerMsgId.b_add_eatc)]
         public class AddEat : ServerMsgBase
         {
-            [JsonProperty(@"length")]
-            public int CurLength { get; private set; }
+            [JsonProperty(@"stop")]
+            public int Stop { get; private set; }
             [JsonProperty(@"data")]
             public Eat Eat { get; private set; }
         }
@@ -85,10 +85,24 @@ namespace TcpConnect.ServerInterface
         [ServerId(ServerMsgId.b_add_diaperc)]
         public class AddDiaper : ServerMsgBase
         {
-            [JsonProperty(@"length")]
-            public int CurLength { get; private set; }
+            [JsonProperty(@"stop")]
+            public int Stop { get; private set; }
             [JsonProperty(@"data")]
             public Diaper Diaper { get; private set; }
+        }
+
+        [ServerId(ServerMsgId.b_del_eatc)]
+        public class DelEat
+        {
+            [JsonProperty(@"stop")]
+            public int Stop { get; private set; }
+        }
+
+        [ServerId(ServerMsgId.b_del_diaperc)]
+        public class DelDiaper
+        {
+            [JsonProperty(@"stop")]
+            public int Stop { get; private set; }
         }
     }
 
@@ -108,9 +122,9 @@ namespace TcpConnect.ServerInterface
         public Action<BroadcastMsgType.AddDiaper> B_AddDiaper;
 
         [ServerId(ServerMsgId.b_del_eatc)]
-        public Action<string> B_DelEat;
+        public Action<BroadcastMsgType.DelEat> B_DelEat;
 
         [ServerId(ServerMsgId.b_del_diaperc)]
-        public Action<string> B_DelDiaper;
+        public Action<BroadcastMsgType.DelDiaper> B_DelDiaper;
     }
 }

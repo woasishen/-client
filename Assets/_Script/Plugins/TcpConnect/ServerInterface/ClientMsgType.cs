@@ -88,14 +88,14 @@ namespace TcpConnect.ServerInterface
         {
             public override ClientMsgId ClientMsgId => ClientMsgId.add_diaper;
 
-            public AddDiaper(bool shit, int mg)
+            public AddDiaper(string excreteType, int mg)
             {
-                Shit = shit;
+                ExcreteType = excreteType;
                 Mg = mg;
             }
 
-            [JsonProperty(@"shit")]
-            public bool Shit { get; private set; }
+            [JsonProperty(@"excreteType")]
+            public string ExcreteType { get; private set; }
             [JsonProperty(@"mg")]
             public int Mg { get; private set; }
         }
@@ -163,9 +163,9 @@ namespace TcpConnect.ServerInterface
             var msg = new ClientMsgType.AddEat(drinkType, ml);
             _sendQueue.Enqueue(msg);
         }
-        public void AddDiaper(bool shit, int mg)
+        public void AddDiaper(string excreteType, int mg)
         {
-            var msg = new ClientMsgType.AddDiaper(shit, mg);
+            var msg = new ClientMsgType.AddDiaper(excreteType, mg);
             _sendQueue.Enqueue(msg);
         }
 

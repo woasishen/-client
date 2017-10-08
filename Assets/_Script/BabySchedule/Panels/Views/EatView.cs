@@ -1,4 +1,5 @@
-﻿using BabySchedule.Panels.Layers;
+﻿using System.Linq;
+using BabySchedule.Panels.Layers;
 using BabySchedule.Panels.Views.Base;
 using TcpConnect;
 using UnityEngine.UI;
@@ -8,11 +9,13 @@ namespace BabySchedule.Panels.Views
     public class EatView : BaseView
     {
         private ToggleGroup _milkOrWater;
+        private InputField _ml;
         protected override void Awake()
         {
             base.Awake();
             transform.Find("ConfirmButton").GetComponent<Button>().onClick.AddListener(ConfirmBtnClicked);
             _milkOrWater = transform.Find("MilkOrWater").GetComponent<ToggleGroup>();
+            _ml = transform.Find("Ml").GetComponentInChildren<InputField>();
         }
 
         private void ConfirmBtnClicked()
@@ -22,9 +25,20 @@ namespace BabySchedule.Panels.Views
                 MsgBox.Show("请勾选饮品");
                 return;
             }
-            TcpInstance.Socket.SendMethod.AddEat("milk", 1);
+
+            int ml;
+            int.TryParse(_ml.text, out ml);
+
+            if (ml <= 0)
+            {
+                MsgBox.Show("请填写ML");
+                return;
+            }
+
+            TcpInstance.Socket.SendMethod.AddEat(
+                _milkOrWater.ActiveToggles().First().name,
+                ml
+            );
         }
-
-
     }
 }

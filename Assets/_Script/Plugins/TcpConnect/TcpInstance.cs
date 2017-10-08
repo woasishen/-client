@@ -15,7 +15,7 @@ namespace TcpConnect
         static TcpInstance()
         {
             //Socket = new TcpSocket("111.206.45.12", 30021);
-            Socket = new TcpSocket("192.168.0.252", 18080);
+            Socket = new TcpSocket("192.168.1.3", 18080);
 
             Socket.ErrAction += s => Debug.LogError(@"Err:" + s);
             Socket.ErrorAction += s => Debug.LogError(@"Error:" + s);
@@ -30,28 +30,25 @@ namespace TcpConnect
             Socket.MsgActions.B_DelDiaper = BDelDiaper;
         }
 
-        private static void BDelDiaper(string delDiaper)
+        private static void BDelDiaper(BroadcastMsgType.DelDiaper delDiaper)
         {
-            if (delDiaper == (StaticData.Diapers.Count - 1).ToString())
+            if (delDiaper.Stop == StaticData.Diapers.Stop)
             {
                 StaticData.Diapers.Pop();
-                return;
             }
         }
 
-        private static void BDelEat(string delEat)
+        private static void BDelEat(BroadcastMsgType.DelEat delEat)
         {
-            if (delEat == (StaticData.Eats.Count - 1).ToString())
+            if (delEat.Stop == StaticData.Eats.Stop)
             {
                 StaticData.Eats.Pop();
-                return;
             }
-
         }
 
         private static void BAddEat(BroadcastMsgType.AddEat addEat)
         {
-            if (addEat.CurLength + 1 == StaticData.Eats.Count)
+            if (addEat.Stop == StaticData.Eats.Stop + 1)
             {
                 StaticData.Eats.Push(addEat.Eat);
             }
@@ -59,7 +56,7 @@ namespace TcpConnect
 
         private static void BAddDiaper(BroadcastMsgType.AddDiaper addDiaper)
         {
-            if (addDiaper.CurLength + 1 == StaticData.Diapers.Count)
+            if (addDiaper.Stop == StaticData.Diapers.Stop + 1)
             {
                 StaticData.Diapers.Push(addDiaper.Diaper);
             }
