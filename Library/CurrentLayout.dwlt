@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 11}
-  m_MinSize: {x: 950, y: 621}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 471}
   m_MaxSize: {x: 10002, y: 14021}
   vertical: 1
-  controlID: 104
+  controlID: 72
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 907, y: 571}
   m_MaxSize: {x: 22006, y: 18021}
   vertical: 0
-  controlID: 201
+  controlID: 199
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_MinSize: {x: 632, y: 571}
   m_MaxSize: {x: 18006, y: 18021}
   vertical: 1
-  controlID: 145
+  controlID: 143
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -356,7 +356,7 @@ MonoBehaviour:
   m_MinSize: {x: 632, y: 471}
   m_MaxSize: {x: 18006, y: 14021}
   vertical: 0
-  controlID: 146
+  controlID: 144
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -493,7 +493,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Plugins/PathologicalGames/PoolManager
+    - Assets/Plugins/PathologicalGames
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
@@ -504,7 +504,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: b8240000
     m_LastClickedID: 9400
-    m_ExpandedIDs: 0000000048260000562600006426000066260000682600007c2600007e26000084260000882600008a2600008e26000096260000982600009a260000a8260000aa260000ae280000b0280000b2280000b4280000b6280000b8280000ba280000bc280000be280000
+    m_ExpandedIDs: 00000000582600005c260000682600006a2600006c2600007a2600007e260000922600009a2600009c260000a0260000a2260000a8260000b0260000b2260000b4260000b6260000b8260000c8260000ca260000d0280000d2280000d4280000d6280000d8280000da280000dc280000de280000e0280000e2280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -532,7 +532,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000482600005626000064260000682600007c26000084260000882600008a26000096260000982600009a260000a8260000aa260000ae280000b0280000b2280000b4280000b6280000b8280000ba280000bc280000be2800004a2e00004c2e00004e2e0000582e00005c2e00006a2e00006c2e00006e2e0000
+    m_ExpandedIDs: 00000000582600005c260000682600007a2600007e260000922600009a260000a2260000a8260000b0260000b2260000b4260000b6260000c8260000ca260000d0280000d2280000d4280000d6280000d8280000da280000dc280000de280000e0280000e2280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -648,9 +648,9 @@ MonoBehaviour:
     height: 447
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ca2c0000
+    m_SelectedIDs: b8260000
     m_LastClickedID: 0
-    m_ExpandedIDs: a0f2ffff10f6ffff18fcffff00000000
+    m_ExpandedIDs: 18fcffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

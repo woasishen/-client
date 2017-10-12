@@ -81,7 +81,7 @@
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>Assets\_Script\Plugins\TcpConnect\Newtonsoft.Json.dll</HintPath>
+      <HintPath>Assets\Plugins\TcpConnect\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -104,19 +104,6 @@
     <Compile Include="Assets\_Script\BabySchedule\Panels\Views\Base\BaseView.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\Views\DiaperView.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\Views\EatView.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\ServerInterface\ClientMsgType.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\ServerInterface\Entities.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\ServerInterface\Packet.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\ServerInterface\ServerMsgType.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\ServerManager\GetMsgmanager.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\Socket\ReadWriteLockUtil.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\Socket\SyncQueue.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\Socket\TcpSocket.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\StaticData.cs" />
-    <Compile Include="Assets\_Script\Plugins\TcpConnect\TcpInstance.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Plugins\PathologicalGames\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

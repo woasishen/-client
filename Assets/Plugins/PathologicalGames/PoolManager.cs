@@ -4,9 +4,10 @@
 /// You may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at: http://licensing.path-o-logical.com
 /// </Licensing>
-using UnityEngine;
-using System.Collections;
+
 using System.Collections.Generic;
+using UnityEngine;
+
 //using System.Diagnostics;
 
 namespace PathologicalGames
