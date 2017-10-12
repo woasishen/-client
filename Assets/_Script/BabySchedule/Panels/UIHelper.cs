@@ -16,5 +16,16 @@ namespace BabySchedule.Panels
         {
             obj.GetComponent<RectTransform>().UIFill();
         }
+
+        public static void UIFillWidth(this RectTransform rect)
+        {
+            rect.offsetMax = new Vector2(0, rect.offsetMax.y);
+            rect.offsetMin = new Vector2(0, rect.offsetMin.y);
+        }
+
+        public static void UIFillWidth(this GameObject obj)
+        {
+            obj.GetComponent<RectTransform>().UIFillWidth();
+        }
     }
 }

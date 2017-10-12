@@ -12,7 +12,7 @@ namespace TcpConnect
 
     public static class StaticData
     {
-        public static Cache<Eat> Eats;
-        public static Cache<Diaper> Diapers;
+        public static Cache<Eat> Eats = new Cache<Eat>();
+        public static Cache<Diaper> Diapers = new Cache<Diaper>();
     }
 }
