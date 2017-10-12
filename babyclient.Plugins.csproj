@@ -88,6 +88,7 @@
     <Compile Include="Assets\Plugins\PathologicalGames\PoolManager.cs" />
     <Compile Include="Assets\Plugins\PathologicalGames\PreRuntimePoolItem.cs" />
     <Compile Include="Assets\Plugins\PathologicalGames\SpawnPool.cs" />
+    <Compile Include="Assets\Plugins\PathologicalGames\Spawns.cs" />
     <Compile Include="Assets\Plugins\TcpConnect\ServerInterface\ClientMsgType.cs" />
     <Compile Include="Assets\Plugins\TcpConnect\ServerInterface\Entities.cs" />
     <Compile Include="Assets\Plugins\TcpConnect\ServerInterface\Packet.cs" />

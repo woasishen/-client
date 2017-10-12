@@ -93,11 +93,13 @@
   <ItemGroup>
     <Compile Include="Assets\_Script\BabySchedule\GameController.cs" />
     <Compile Include="Assets\_Script\BabySchedule\MonoBehaviourBase.cs" />
+    <Compile Include="Assets\_Script\BabySchedule\Panels\BaseScrollView.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\CanvasInstance.cs" />
-    <Compile Include="Assets\_Script\BabySchedule\Panels\CanvasMain.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\Layers\Base\BaseLayer.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\Layers\Base\LayerBg.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\Layers\MsgBox.cs" />
+    <Compile Include="Assets\_Script\BabySchedule\Panels\Main\CanvasMain.cs" />
+    <Compile Include="Assets\_Script\BabySchedule\Panels\Main\MainScrollView.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\UIHelper.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\UILayers.cs" />
     <Compile Include="Assets\_Script\BabySchedule\Panels\UIVIews.cs" />
