@@ -40,7 +40,7 @@ namespace BabySchedule.Panels.Main
 
         private Button _diaperBtn;
         private Button _eatBtn;
-        private MainScrollView _scrollView;
+        private MainVerticalScrollView _verticalScrollView;
 
         private List<Dropdown> _dropdowns;
 
@@ -50,7 +50,7 @@ namespace BabySchedule.Panels.Main
             _diaperBtn = transform.Find("Bottom/DiaperButton").GetComponent<Button>();
             _eatBtn = transform.Find("Bottom/EatButton").GetComponent<Button>();
 
-            _scrollView = transform.Find("Content/ScrollView").GetComponent<MainScrollView>();
+            _verticalScrollView = transform.Find("Content/ScrollView").GetComponent<MainVerticalScrollView>();
 
             _diaperBtn.onClick.AddListener(DiaperBtnClicked);
             _eatBtn.onClick.AddListener(EatBtnClicked);
@@ -70,24 +70,23 @@ namespace BabySchedule.Panels.Main
 
         private void DropDownChange(int index, int arg)
         {
-            if (index > 0)
+            if (index == 0)
             {
-                _scrollView.UpdateContent(_dropdowns[0].value);
-                return;
-            }
-            for (int i = 1; i < DROP_DOWN_COUNT; i++)
-            {
-                _dropdowns[i].value = 0;
-                _dropdowns[i].gameObject.SetActive(arg != 0);
-                if (arg <= 0)
+                for (int i = 1; i < DROP_DOWN_COUNT; i++)
                 {
-                    continue;
+                    _dropdowns[i].value = 0;
+                    _dropdowns[i].gameObject.SetActive(arg != 0);
+                    if (arg <= 0)
+                    {
+                        continue;
+                    }
+                    _dropdowns[i].options.RemoveRange(1, _dropdowns[i].options.Count - 1);
+                    _dropdowns[i].AddOptions(OPTIONS[i][arg]);
                 }
-                _dropdowns[i].options.RemoveRange(1, _dropdowns[i].options.Count - 1);
-                _dropdowns[i].AddOptions(OPTIONS[i][arg]);
             }
 
-            _scrollView.UpdateContent(_dropdowns[0].value);
+            _verticalScrollView.SetData(_dropdowns[0].value);
+            _verticalScrollView.ReloadData();
         }
 
         private void DiaperBtnClicked()

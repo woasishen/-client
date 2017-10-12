@@ -62,9 +62,10 @@ namespace PathologicalGames
 
         private void InitPool(out SpawnPool pool, string poolName)
         {
-            var hudCtrlRoot = new GameObject(poolName + "Root");
-            hudCtrlRoot.transform.parent = _spawnPools.transform;
-            pool = PoolManager.Pools.Create(poolName, hudCtrlRoot);
+            var poolRoot = new GameObject(poolName + "Root");
+            poolRoot.transform.parent = _spawnPools.transform;
+            pool = PoolManager.Pools.Create(poolName, poolRoot);
+            pool.dontReparent = false;
             _poolList.Add(pool);
         }
     }
