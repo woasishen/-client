@@ -10,9 +10,16 @@ namespace BabySchedule.Panels.Views.Base
         protected override void Awake()
         {
             base.Awake();
-
-            transform.Find("ExitButton")?.GetComponent<Button>().onClick.AddListener(Exit);
-            transform.Find("CancelButton").GetComponent<Button>().onClick.AddListener(Exit);
+            var exitBtn = transform.Find("ExitButton");
+            if (exitBtn)
+            {
+                exitBtn.GetComponent<Button>().onClick.AddListener(Exit);
+            }
+            var cancelBtn = transform.Find("CancelButton");
+            if (cancelBtn)
+            {
+                cancelBtn.GetComponent<Button>().onClick.AddListener(Exit);
+            }
         }
         private void Exit()
         {

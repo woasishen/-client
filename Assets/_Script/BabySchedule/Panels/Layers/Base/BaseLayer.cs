@@ -14,7 +14,7 @@ namespace BabySchedule.Panels.Layers.Base
             var cancelBtn = transform.Find("CancelButton");
             if (cancelBtn)
             {
-                cancelBtn?.GetComponent<Button>().onClick.AddListener(Exit);
+                cancelBtn.GetComponent<Button>().onClick.AddListener(Exit);
             }
         }
         private void Exit()

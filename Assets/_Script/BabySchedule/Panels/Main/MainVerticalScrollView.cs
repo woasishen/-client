@@ -2,12 +2,16 @@
 using PathologicalGames;
 using TcpConnect;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BabySchedule.Panels.Main
 {
     public class MainVerticalScrollView : BaseVerticalScrollView
     {
-        protected override string CellPath => @"Prefabs/Panels/VIews/DiaperViewItems/Cell";
+        protected override string CellPath
+        {
+            get { return @"Prefabs/Panels/VIews/DiaperViewItems/Cell"; }
+        } 
 
         protected override int CellCount
         {
@@ -16,13 +20,7 @@ namespace BabySchedule.Panels.Main
 
         protected override void UpdateItem(Transform item, int index)
         {
-
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-
+            item.GetChild(1).GetComponent<Text>().text = index.ToString();
         }
 
         public void SetData(int dropDownValue)

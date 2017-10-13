@@ -5,9 +5,12 @@ namespace TcpConnect
 {
     public class Cache<T> : Stack<T>
     {
-        public int Start { set; get; } = 0;
+        public int Stop
+        {
+            get { return Start + Count - 1; }
+        }
 
-        public int Stop => Start + Count - 1;
+        public int Start { set; get; }
     }
 
     public static class StaticData

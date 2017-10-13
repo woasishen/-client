@@ -41,7 +41,7 @@ namespace TcpConnect.ServerInterface
 
     public class ServerIdAttribute : Attribute
     {
-        public ServerMsgId Id { get; }
+        public ServerMsgId Id { get; private set; }
         public ServerIdAttribute(ServerMsgId id)
         {
             Id = id;
