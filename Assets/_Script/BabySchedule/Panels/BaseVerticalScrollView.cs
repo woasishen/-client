@@ -49,7 +49,7 @@ namespace BabySchedule.Panels
             _cellHeight = ScrollRect.content.rect.height;
             _viewHeight = GetComponent<RectTransform>().rect.height;
 
-            _showCellMaxCount = (int)Math.Ceiling(_viewHeight / _cellHeight) + 1;
+            _showCellMaxCount = (int)Math.Ceiling(_viewHeight / _cellHeight) + 2;
         }
 
         protected override void OnEnable()
@@ -135,27 +135,56 @@ namespace BabySchedule.Panels
             }
         }
 
+        private bool TryMoveFirstToLast()
+        {
+            if (_usingCells.EndIndex == CellCount)
+            {
+                return false;
+            }
+            RemoveItem(FirstOrLast.First);
+            AddItem(FirstOrLast.Last);
+            return true;
+        }
+
+        private bool TryMoveLastToFirst()
+        {
+            if (_usingCells.StartIndex == 0)
+            {
+                return false;
+            }
+            RemoveItem(FirstOrLast.Last);
+            AddItem(FirstOrLast.First);
+            return true;
+        }
+
         private void OnScrollRectScrolled(float arg)
         {
+            if (_usingCells.Count == 0)
+            {
+                return;
+            }
             //move up
             if (_oldScrollF > arg)
             {
-                while (_cellHeight - _usingCells.Last.Value.localPosition.y <
-                    ScrollRect.content.anchoredPosition.y &&
-                    _usingCells.EndIndex < CellCount)
+                while (-_usingCells.Last.Value.localPosition.y <
+                    ScrollRect.content.anchoredPosition.y + _viewHeight)
                 {
-                    RemoveItem(FirstOrLast.First);
-                    AddItem(FirstOrLast.Last);
+                    if (!TryMoveFirstToLast())
+                    {
+                        break;
+                    }
                 }
             }
             //move down
             else
             {
-                while (-_cellHeight - _usingCells.Last.Value.localPosition.y > 
-                    ScrollRect.content.anchoredPosition.y + _viewHeight)
+                while (_cellHeight - _usingCells.First.Value.localPosition.y >
+                    ScrollRect.content.anchoredPosition.y)
                 {
-                    RemoveItem(FirstOrLast.Last);
-                    AddItem(FirstOrLast.First);
+                    if (!TryMoveLastToFirst())
+                    {
+                        break;
+                    }
                 }
             }
             _oldScrollF = arg;

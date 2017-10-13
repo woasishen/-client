@@ -16,8 +16,8 @@ namespace TcpConnect.ServerInterface
     {
         [JsonProperty(@"time")]
         public int Time { get; private set; }
-        [JsonProperty(@"shit")]
-        public bool Shit { get; private set; }
+        [JsonProperty(@"excreteType")]
+        public string ExcreteType { get; private set; }
         [JsonProperty(@"mg")]
         public int Mg { get; private set; }
     }
