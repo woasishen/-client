@@ -72,18 +72,25 @@ namespace TcpConnect.ServerManager
         private void HandleNormalMsg(Packet packet)
         {
             ServerMsgId id;
-            Enum.TryParse(packet.Id, out id);
+            EnumHelper.TryParse(packet.Id, out id);
+
             var serverMsgBase = (ServerMsgBase)JsonConvert.DeserializeObject(packet.Msg.ToString(), 
                 _msgTypeDict.ContainsKey(id) ? _msgTypeDict[id] : typeof(ServerMsgBase));
             if (serverMsgBase.Err != null)
             {
                 //数据库内部错误
-                ErrAction?.Invoke(serverMsgBase.Err.ToString());
+                if (ErrAction != null)
+                {
+                    ErrAction.Invoke(serverMsgBase.Err.ToString());
+                }
                 return;
             }
             if (serverMsgBase.Error != null)
             {
-                ErrorAction?.Invoke(serverMsgBase.Error.ToString());
+                if (ErrAction != null)
+                {
+                    ErrorAction.Invoke(serverMsgBase.Error.ToString());
+                }
                 return;
             }
             if (!serverMsgBase.Succeed)
@@ -107,7 +114,7 @@ namespace TcpConnect.ServerManager
 
             var msg = _broadcastMsgTypeDict.ContainsKey(id)
                 ? JsonConvert.DeserializeObject(packet.Msg.ToString(), _broadcastMsgTypeDict[id])
-                : packet.Msg?.ToString();
+                : packet.Msg.ToString();
 
             var action = _msgActionDict[id].GetValue(_serverMsgAction);
             if (action == null)

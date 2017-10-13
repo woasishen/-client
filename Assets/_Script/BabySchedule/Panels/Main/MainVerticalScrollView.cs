@@ -16,7 +16,13 @@ namespace BabySchedule.Panels.Main
 
         protected override void UpdateItem(Transform item, int index)
         {
-            
+
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+
         }
 
         public void SetData(int dropDownValue)

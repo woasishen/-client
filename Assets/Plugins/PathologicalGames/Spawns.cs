@@ -13,7 +13,12 @@ namespace PathologicalGames
 
         #endregion
 
-        public static Spawns Instance { get; } = new Spawns();
+        private static readonly Spawns instance = new Spawns();
+
+        public static Spawns Instance
+        {
+            get { return instance; }
+        }
 
         public Spawns()
         {
@@ -24,7 +29,10 @@ namespace PathologicalGames
 
         #region 对外Pools
 
-        public SpawnPool ViewCellPool => _viewCellPool;
+        public SpawnPool ViewCellPool
+        {
+            get { return _viewCellPool; }
+        }
 
         #endregion
 

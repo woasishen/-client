@@ -10,7 +10,5 @@ namespace BabySchedule
         protected virtual void Update() { }
 
         protected virtual void OnDestroy() { }
-
-        protected virtual void OnRectTransformDimensionsChange() { }
     }
 }

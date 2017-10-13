@@ -16,7 +16,6 @@ namespace BabySchedule.Panels
 
         private float _cellHight;
         private int _usingCellCount;
-        
 
         protected override void Awake()
         {
@@ -27,7 +26,8 @@ namespace BabySchedule.Panels
             ScrollRect.verticalScrollbar.onValueChanged.AddListener(OnScrollRectScrolled);
 
             _cellHight = ScrollRect.content.rect.height;
-            _usingCellCount = (int)Math.Ceiling(ScrollRect.viewport.rect.height / _cellHight) + 1;
+
+            _usingCellCount = (int)Math.Ceiling(GetComponent<RectTransform>().rect.height / _cellHight) + 1;
         }
 
         public void ReloadData(bool keepPosition = false)
@@ -36,9 +36,9 @@ namespace BabySchedule.Panels
             {
                 ScrollRect.content.anchoredPosition = new Vector2(0, 0);
             }
-            
 
-            ScrollRect.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, CellCount * _cellHight);
+            ScrollRect.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
+                CellCount * _cellHight);
 
             var startIndex = (int)(ScrollRect.content.anchoredPosition.y / _cellHight);
 

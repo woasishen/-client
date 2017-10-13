@@ -11,7 +11,7 @@ namespace TcpConnect.Socket
 {
     public class TcpSocket
     {
-        private static int _headLength;
+        private static int HeadLength;
 
         private readonly TcpClient _client;
         private readonly int _recieveBuffSize;
@@ -24,18 +24,22 @@ namespace TcpConnect.Socket
         private readonly SyncQueue<Packet> _getQueue = new SyncQueue<Packet>();
 
         private readonly GetMsgManager _getMsgManager;
+        private readonly ServerMsgAction _msgActions = new ServerMsgAction();
 
         public Action<string> ErrAction;
         public Action<string> ErrorAction;
         public Action NotSucceedAction;
 
-        public ServerMsgAction MsgActions { get; } = new ServerMsgAction();
+        public ServerMsgAction MsgActionses
+        {
+            get { return _msgActions; }
+        }
 
-        public SendMethod SendMethod { get; }
+        public SendMethod SendMethod { get; private set; }
 
         public TcpSocket(string address, int port)
         {
-            _getMsgManager = new GetMsgManager(MsgActions)
+            _getMsgManager = new GetMsgManager(MsgActionses)
             {
                 ErrAction = s => ErrAction.Invoke(s),
                 ErrorAction = s => ErrorAction.Invoke(s),
@@ -49,7 +53,7 @@ namespace TcpConnect.Socket
             //client开始必须和server约定Head长度
             var buffer = new byte[4];
             _client.GetStream().Read(buffer, 0, 4);
-            _headLength = Convert.ToInt32(Encoding.UTF8.GetString(buffer, 0, 4));
+            HeadLength = Convert.ToInt32(Encoding.UTF8.GetString(buffer, 0, 4));
 
             _sendThread = new Thread(SendThread);
             _getThread = new Thread(GetThread);
@@ -91,7 +95,7 @@ namespace TcpConnect.Socket
                         sw.Write(json);
                         sw.Flush();
                         var title = BitConverter.GetBytes(ms.Length);
-                        _client.GetStream().Write(title, 0, _headLength);
+                        _client.GetStream().Write(title, 0, HeadLength);
                         _client.GetStream().Write(ms.GetBuffer(), 0, (int)ms.Length);
                     }
                 }
@@ -102,13 +106,13 @@ namespace TcpConnect.Socket
         private void GetThread()
         {
             var bodyBuffer = new byte[_recieveBuffSize];
-            var headBuffer = new byte[_headLength];
+            var headBuffer = new byte[HeadLength];
             var bodyStream = new MemoryStream();
             var sr = new StreamReader(bodyStream);
 
             while (true)
             {
-                _client.GetStream().Read(headBuffer, 0, _headLength);
+                _client.GetStream().Read(headBuffer, 0, HeadLength);
                 var leftLength = BitConverter.ToInt32(headBuffer, 0);
                 while (leftLength > 0)
                 {

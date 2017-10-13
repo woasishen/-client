@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using TcpConnect.Socket;
+using UnityEngine;
 
 // ReSharper disable InconsistentNaming
 
@@ -30,7 +31,10 @@ namespace TcpConnect.ServerInterface
     {
         public class GetEats : ClientMsgBase
         {
-            public override ClientMsgId ClientMsgId => ClientMsgId.get_eats;
+            public override ClientMsgId ClientMsgId
+            {
+                get { return ClientMsgId.get_eats; }
+            } 
             public GetEats(int start, int stop)
             {
                 Start = start;
@@ -39,18 +43,22 @@ namespace TcpConnect.ServerInterface
 
             public GetEats()
             {
+                Stop = 9;
             }
 
             [JsonProperty(@"start")]
             public int Start { get; private set; }
 
             [JsonProperty(@"stop")]
-            public int Stop { get; private set; } = 9;
+            public int Stop { get; private set; }
         }
 
         public class GetDiapers : ClientMsgBase
         {
-            public override ClientMsgId ClientMsgId => ClientMsgId.get_diapers;
+            public override ClientMsgId ClientMsgId
+            {
+                get { return ClientMsgId.get_diapers; }
+            }
             public GetDiapers(int start, int stop)
             {
                 Start = start;
@@ -59,18 +67,22 @@ namespace TcpConnect.ServerInterface
 
             public GetDiapers()
             {
+                Stop = 9;
             }
 
             [JsonProperty(@"start")]
             public int Start { get; private set; }
 
             [JsonProperty(@"stop")]
-            public int Stop { get; private set; } = 9;
+            public int Stop { get; private set; }
         }
 
         public class AddEat : ClientMsgBase
         {
-            public override ClientMsgId ClientMsgId => ClientMsgId.add_eat;
+            public override ClientMsgId ClientMsgId
+            {
+                get { return ClientMsgId.add_eat; }
+            }
 
             public AddEat(string drinkType, int ml)
             {
@@ -86,7 +98,10 @@ namespace TcpConnect.ServerInterface
 
         public class AddDiaper : ClientMsgBase
         {
-            public override ClientMsgId ClientMsgId => ClientMsgId.add_diaper;
+            public override ClientMsgId ClientMsgId
+            {
+                get { return ClientMsgId.add_diaper; }
+            }
 
             public AddDiaper(string excreteType, int mg)
             {
@@ -102,7 +117,10 @@ namespace TcpConnect.ServerInterface
 
         public class DelEat : ClientMsgBase
         {
-            public override ClientMsgId ClientMsgId => ClientMsgId.del_eat;
+            public override ClientMsgId ClientMsgId
+            {
+                get { return ClientMsgId.del_eat; }
+            }
             public DelEat(int curLength)
             {
                 CurLength = curLength;
@@ -114,7 +132,10 @@ namespace TcpConnect.ServerInterface
 
         public class DelDiaper : ClientMsgBase
         {
-            public override ClientMsgId ClientMsgId => ClientMsgId.del_diaper;
+            public override ClientMsgId ClientMsgId
+            {
+                get { return ClientMsgId.del_diaper; }
+            }
             public DelDiaper(int curLength)
             {
                 CurLength = curLength;

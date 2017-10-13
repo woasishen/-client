@@ -10,7 +10,7 @@ namespace TcpConnect
     {
         //private readonly TcpSocket _socket = new TcpSocket("192.168.0.252", 18080);
 
-        public static TcpSocket Socket { get; }
+        public static TcpSocket Socket { get; private set; }
 
         static TcpInstance()
         {
@@ -21,13 +21,13 @@ namespace TcpConnect
             Socket.ErrorAction += s => Debug.LogError(@"Error:" + s);
             Socket.NotSucceedAction += () => Debug.LogError(@"请求未成功");
 
-            Socket.MsgActions.GetEats = GetEats;
-            Socket.MsgActions.GetDiapers = GetDiapers;
+            Socket.MsgActionses.GetEats = GetEats;
+            Socket.MsgActionses.GetDiapers = GetDiapers;
 
-            Socket.MsgActions.B_AddEat = BAddEat;
-            Socket.MsgActions.B_AddDiaper = BAddDiaper;
-            Socket.MsgActions.B_DelEat = BDelEat;
-            Socket.MsgActions.B_DelDiaper = BDelDiaper;
+            Socket.MsgActionses.B_AddEat = BAddEat;
+            Socket.MsgActionses.B_AddDiaper = BAddDiaper;
+            Socket.MsgActionses.B_DelEat = BDelEat;
+            Socket.MsgActionses.B_DelDiaper = BDelDiaper;
         }
 
         private static void BDelDiaper(BroadcastMsgType.DelDiaper delDiaper)
