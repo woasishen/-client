@@ -12,8 +12,6 @@ namespace TcpConnect.ServerManager
 
         private readonly ServerMsgAction _serverMsgAction;
 
-        private readonly Dictionary<ServerMsgId, FieldInfo> _msgActionDict =
-            new Dictionary<ServerMsgId, FieldInfo>();
         private readonly Dictionary<ServerMsgId, Type> _msgTypeDict =
             new Dictionary<ServerMsgId, Type>();
         private readonly Dictionary<ServerMsgId, Type> _broadcastMsgTypeDict =
@@ -26,16 +24,6 @@ namespace TcpConnect.ServerManager
         public GetMsgManager(ServerMsgAction serverMsgAction)
         {
             _serverMsgAction = serverMsgAction;
-            foreach (var fieldInfo in typeof(ServerMsgAction).GetFields())
-            {
-                var serverIdAttr = (ServerIdAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(ServerIdAttribute));
-                if (serverIdAttr == null)
-                {
-                    continue;
-                }
-                _msgActionDict[serverIdAttr.Id] = fieldInfo;
-            }
-
             foreach (var typeInfo in typeof(ServerMsgType).GetNestedTypes())
             {
                 var serverIdAttr = (ServerIdAttribute)Attribute.GetCustomAttribute(typeInfo, typeof(ServerIdAttribute));
@@ -98,14 +86,7 @@ namespace TcpConnect.ServerManager
                 NotSucceedAction.Invoke();
                 return;
             }
-
-            var action = _msgActionDict[id].GetValue(_serverMsgAction);
-            if (action == null)
-            {
-                return;
-            }
-            var methond = action.GetType().GetMethod("Invoke");
-            methond.Invoke(action, new object[] { serverMsgBase });
+            _serverMsgAction.HandleMsg(id, new object[]{ serverMsgBase });
         }
 
         private void HandleBroaderCastMsg(Packet packet)
@@ -116,13 +97,7 @@ namespace TcpConnect.ServerManager
                 ? JsonConvert.DeserializeObject(packet.Msg.ToString(), _broadcastMsgTypeDict[id])
                 : packet.Msg.ToString();
 
-            var action = _msgActionDict[id].GetValue(_serverMsgAction);
-            if (action == null)
-            {
-                return;
-            }
-            var methond = action.GetType().GetMethod("Invoke");
-            methond.Invoke(action, new[] { msg });
+            _serverMsgAction.HandleMsg(id, new[] { msg });
         }
     }
 }

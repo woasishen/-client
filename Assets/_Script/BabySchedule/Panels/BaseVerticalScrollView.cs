@@ -116,6 +116,7 @@ namespace BabySchedule.Panels
             }
             tempItem.SetParent(ScrollRect.content);
             tempItem.localPosition = new Vector3(0, -index * _cellHeight);
+            tempItem.localScale = Vector3.one;
             UpdateItem(tempItem, index);
         }
 

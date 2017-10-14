@@ -21,7 +21,7 @@ namespace BabySchedule.Panels.Views.Base
                 cancelBtn.GetComponent<Button>().onClick.AddListener(Exit);
             }
         }
-        private void Exit()
+        protected void Exit()
         {
             Destroy(gameObject);
             OnExit.Invoke();

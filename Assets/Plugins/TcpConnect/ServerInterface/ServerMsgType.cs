@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
-
 // ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Local
 
 namespace TcpConnect.ServerInterface
 {
     public enum ServerMsgId
     {
         none,
-        get_eats,
-        get_diapers,
+        get_eatsc,
+        get_diapersc,
+
+        add_eatc,
+        add_diaperc,
+        del_eatc,
+        del_diaperc,
 
         b_add_eatc,
         b_add_diaperc,
@@ -50,24 +56,24 @@ namespace TcpConnect.ServerInterface
 
     public abstract class ServerMsgType
     {
-        [ServerId(ServerMsgId.get_eats)]
+        [ServerId(ServerMsgId.get_eatsc)]
         public class GetEats : ServerMsgBase
         {
             [JsonProperty(@"start")]
             public int Start { get; private set; }
 
             [JsonProperty(@"data")]
-            public Cache<Eat> Eats { get; private set; }
+            public List<Eat> Eats { get; private set; }
         }
 
-        [ServerId(ServerMsgId.get_diapers)]
+        [ServerId(ServerMsgId.get_diapersc)]
         public class GetDiapers : ServerMsgBase
         {
             [JsonProperty(@"start")]
             public int Start { get; private set; }
 
             [JsonProperty(@"data")]
-            public Cache<Diaper> Diapers { get; private set; }
+            public List<Diaper> Diapers { get; private set; }
         }
     }
 
@@ -108,23 +114,90 @@ namespace TcpConnect.ServerInterface
 
     public class ServerMsgAction
     {
-        [ServerId(ServerMsgId.get_eats)]
-        public Action<ServerMsgType.GetEats> GetEats;
+        private readonly Dictionary<ServerMsgId, bool> _isDirty = new Dictionary<ServerMsgId, bool>();
 
-        [ServerId(ServerMsgId.get_diapers)]
-        public Action<ServerMsgType.GetDiapers> GetDiapers;
+        private static readonly Dictionary<ServerMsgId, MethodInfo> MsgAction = 
+            new Dictionary<ServerMsgId, MethodInfo>();
 
-        //broadcast
+        static ServerMsgAction()
+        {
+            BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
+            foreach (var methodInfo in typeof(ServerMsgAction).GetMethods(bindingFlags))
+            {
+                var serverIdAttr = (ServerIdAttribute)Attribute.GetCustomAttribute(methodInfo, typeof(ServerIdAttribute));
+                if (serverIdAttr == null)
+                {
+                    continue;
+                }
+                MsgAction[serverIdAttr.Id] = methodInfo;
+            }
+        }
+
+        public void HandleMsg(ServerMsgId id, object[] args)
+        {
+            if (MsgAction.ContainsKey(id))
+            {
+                MsgAction[id].Invoke(this, args);
+            }
+            _isDirty[id] = true;
+        }
+
+        public bool IsDirty(ServerMsgId id)
+        {
+            if (_isDirty.ContainsKey(id))
+            {
+                return _isDirty[id];
+            }
+            return false;
+        }
+
+        public void ClearDirty(ServerMsgId id)
+        {
+            _isDirty[id] = false;
+        }
+
+        [ServerId(ServerMsgId.get_eatsc)]
+        protected void OnGetEats(ServerMsgType.GetEats obj)
+        {
+            StaticData.Eats = new Cache<Eat>(obj.Eats); ;
+        }
+        [ServerId(ServerMsgId.get_diapersc)]
+        protected void OnGetDiapers(ServerMsgType.GetDiapers obj)
+        {
+            StaticData.Diapers = new Cache<Diaper>(obj.Diapers);
+        }
         [ServerId(ServerMsgId.b_add_eatc)]
-        public Action<BroadcastMsgType.AddEat> B_AddEat;
-
+        protected void OnBAddEat(BroadcastMsgType.AddEat obj)
+        {
+            if (obj.Stop == StaticData.Eats.Stop + 1)
+            {
+                StaticData.Eats.Push(obj.Eat);
+            }
+        }
         [ServerId(ServerMsgId.b_add_diaperc)]
-        public Action<BroadcastMsgType.AddDiaper> B_AddDiaper;
-
+        protected void OnBAddDiaper(BroadcastMsgType.AddDiaper obj)
+        {
+            if (obj.Stop == StaticData.Diapers.Stop + 1)
+            {
+                StaticData.Diapers.Push(obj.Diaper);
+            }
+        }
         [ServerId(ServerMsgId.b_del_eatc)]
-        public Action<BroadcastMsgType.DelEat> B_DelEat;
-
+        protected void OnBDelEat(BroadcastMsgType.DelEat obj)
+        {
+            if (obj.Stop == StaticData.Eats.Stop)
+            {
+                StaticData.Eats.Pop();
+            }
+        }
         [ServerId(ServerMsgId.b_del_diaperc)]
-        public Action<BroadcastMsgType.DelDiaper> B_DelDiaper;
+        protected void OnBDelDiaper(BroadcastMsgType.DelDiaper obj)
+        {
+            if (obj.Stop == StaticData.Diapers.Stop)
+            {
+                StaticData.Diapers.Pop();
+            }
+        }
+
     }
 }

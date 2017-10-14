@@ -5,7 +5,7 @@ namespace TcpConnect.ServerInterface
     public class Eat
     {
         [JsonProperty(@"time")]
-        public int Time { get; private set; }
+        public long Time { get; private set; }
         [JsonProperty(@"drinktype")]
         public string DrinkType { get; private set; }
         [JsonProperty(@"ml")]
@@ -15,7 +15,7 @@ namespace TcpConnect.ServerInterface
     public class Diaper
     {
         [JsonProperty(@"time")]
-        public int Time { get; private set; }
+        public long Time { get; private set; }
         [JsonProperty(@"excreteType")]
         public string ExcreteType { get; private set; }
         [JsonProperty(@"mg")]

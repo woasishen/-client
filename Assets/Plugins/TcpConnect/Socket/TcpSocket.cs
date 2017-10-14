@@ -30,7 +30,7 @@ namespace TcpConnect.Socket
         public Action<string> ErrorAction;
         public Action NotSucceedAction;
 
-        public ServerMsgAction MsgActionses
+        public ServerMsgAction MsgActions
         {
             get { return _msgActions; }
         }
@@ -39,7 +39,7 @@ namespace TcpConnect.Socket
 
         public TcpSocket(string address, int port)
         {
-            _getMsgManager = new GetMsgManager(MsgActionses)
+            _getMsgManager = new GetMsgManager(MsgActions)
             {
                 ErrAction = s => ErrAction.Invoke(s),
                 ErrorAction = s => ErrorAction.Invoke(s),
@@ -69,6 +69,7 @@ namespace TcpConnect.Socket
             _sendThread.Abort();
             _getThread.Abort();
             _handleMsgThread.Abort();
+            _client.Client.Disconnect(false);
             _client.Close();
         }
 

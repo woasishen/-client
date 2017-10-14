@@ -5,6 +5,17 @@ namespace TcpConnect
 {
     public class Cache<T> : Stack<T>
     {
+        public Cache()
+        {
+
+        }
+
+        public Cache(List<T> data)
+            :base(data)
+        {
+            
+        }
+
         public int Stop
         {
             get { return Start + Count - 1; }

@@ -18,7 +18,7 @@ namespace BabySchedule.Panels
                 return null;
             }
             Views.SetActive(true);
-            viewRes.transform.SetAsLastSibling();
+            Views.transform.SetAsLastSibling();
 
             var viewObj = Instantiate(viewRes);
             var viewComponent = viewObj.AddComponent<T>();
@@ -27,7 +27,8 @@ namespace BabySchedule.Panels
                 Views.SetActive(false);
             };
             viewObj.transform.SetParent(Views.transform);
-            viewObj.UIFill();
+            viewObj.transform.localScale = Vector3.one;
+            viewObj.transform.localPosition = Vector3.zero;
             return viewComponent;
         }
 
@@ -38,7 +39,8 @@ namespace BabySchedule.Panels
 
             Views = new GameObject("Views");
             Views.transform.SetParent(transform);
-            Views.AddComponent<RectTransform>().UIFill();
+            Views.transform.localScale = Vector3.one;
+            Views.transform.localPosition = Vector3.zero;
             Views.SetActive(false);
         }
     }

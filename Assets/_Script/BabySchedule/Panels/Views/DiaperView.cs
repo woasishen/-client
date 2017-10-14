@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BabySchedule.Panels.Layers;
 using BabySchedule.Panels.Views.Base;
 using TcpConnect;
+using TcpConnect.Socket;
 using UnityEngine.UI;
 
 namespace BabySchedule.Panels.Views
@@ -17,6 +19,24 @@ namespace BabySchedule.Panels.Views
             transform.Find("ConfirmButton").GetComponent<Button>().onClick.AddListener(ConfirmBtnClicked);
             _shitOrPee = transform.Find("ShitOrPee").GetComponent<ToggleGroup>();
             _mg = transform.Find("Mg").GetComponentInChildren<InputField>();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            MsgController.Instance.AddDiapers += AddDiapers;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            MsgController.Instance.AddDiapers -= AddDiapers;
+        }
+
+        private void AddDiapers()
+        {
+            CanvasInstance.Instance.HideWaitting();
+            Exit();
         }
 
         private void ConfirmBtnClicked()
@@ -40,6 +60,7 @@ namespace BabySchedule.Panels.Views
                 _shitOrPee.ActiveToggles().First().name,
                 mg
             );
+            CanvasInstance.Instance.ShowWaitting();
         }
     }
 }

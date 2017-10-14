@@ -29,6 +29,7 @@ namespace BabySchedule.Panels
             };
             layerObj.transform.SetParent(Layers.transform);
             layerObj.transform.localPosition = Vector3.zero;
+            layerObj.transform.localScale = Vector3.one;
             LayerBg.Show(useBgClose);
             return layerComponent;
         }
@@ -40,12 +41,14 @@ namespace BabySchedule.Panels
 
             Layers = new GameObject("Layers");
             Layers.transform.SetParent(transform);
-            Layers.AddComponent<RectTransform>().UIFill();
+            Layers.transform.localScale = Vector3.one;
+            Layers.transform.localPosition = Vector3.zero;
             Layers.SetActive(false);
 
             var layerBgObj = Instantiate(Resources.Load<GameObject>("Prefabs/Panels/Layers/Base/LayerBg"));
             layerBgObj.transform.SetParent(Layers.transform);
-            layerBgObj.UIFill();
+            layerBgObj.transform.localScale = Vector3.one;
+            layerBgObj.transform.localPosition = Vector3.zero;
             layerBgObj.SetActive(false);
             LayerBg = layerBgObj.GetComponent<LayerBg>();
         }

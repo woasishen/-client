@@ -85,18 +85,18 @@ namespace BabySchedule.Panels.Main
                 }
             }
 
-            _verticalScrollView.SetData(_dropdowns[0].value);
+            _verticalScrollView.SetData(_dropdowns[0].value, _dropdowns[1].captionText.text);
             _verticalScrollView.ReloadData();
-        }
-
-        private void DiaperBtnClicked()
-        {
-            UIViews.Instance.ShowView<DiaperView>();
         }
 
         private void EatBtnClicked()
         {
             UIViews.Instance.ShowView<EatView>();
+        }
+
+        private void DiaperBtnClicked()
+        {
+            UIViews.Instance.ShowView<DiaperView>();
         }
     }
 }

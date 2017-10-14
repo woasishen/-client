@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TcpConnect;
+using TcpConnect.ServerInterface;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,20 +10,32 @@ namespace BabySchedule.Panels.Main
 {
     public class MainVerticalScrollView : BaseVerticalScrollView
     {
+        private const string ALL = "All";
+        private int _dataKind;
+        private string _filter = ALL;
+
         private class MainVerticalScrollViewCell
         {
             private readonly List<string> _lines = new List<string>(4);
 
-            public MainVerticalScrollViewCell(
-                string line1,
-                string line2, 
-                string line3, 
-                string line4)
+            public long Time { get; private set; }
+
+            public MainVerticalScrollViewCell(Eat eat)
             {
-                _lines.Add(line1);
-                _lines.Add(line2);
-                _lines.Add(line3);
-                _lines.Add(line4);
+                _lines.Add("吃");
+                _lines.Add(eat.DrinkType);
+                _lines.Add(eat.Ml.ToString());
+                Time = eat.Time;
+                _lines.Add(CommonMethod.TickToTimeStr(Time));
+            }
+
+            public MainVerticalScrollViewCell(Diaper diaper)
+            {
+                _lines.Add("排泄");
+                _lines.Add(diaper.ExcreteType);
+                _lines.Add(diaper.Mg.ToString());
+                Time = diaper.Time;
+                _lines.Add(CommonMethod.TickToTimeStr(Time));
             }
 
             public string this[int index]
@@ -30,12 +44,12 @@ namespace BabySchedule.Panels.Main
             }
         }
 
-        private List<MainVerticalScrollViewCell> _cells = new List<MainVerticalScrollViewCell>();
+        private readonly List<MainVerticalScrollViewCell> _cells = new List<MainVerticalScrollViewCell>();
 
         protected override string CellPath
         {
             get { return @"Prefabs/Panels/VIews/DiaperViewItems/Cell"; }
-        } 
+        }
 
         protected override int CellCount
         {
@@ -50,28 +64,55 @@ namespace BabySchedule.Panels.Main
             }
         }
 
-        public void SetData(int dropDownValue)
+        protected override void OnEnable()
         {
+            MsgController.Instance.GetEats += DataChanged;
+            MsgController.Instance.GetDiapers += DataChanged;
+            MsgController.Instance.B_AddEat += DataChanged;
+            MsgController.Instance.B_DelEat += DataChanged;
+            MsgController.Instance.B_AddDiaper += DataChanged;
+            MsgController.Instance.B_DelDiaper += DataChanged;
+            SetData(_dataKind, _filter);
+            base.OnEnable();
+        }
+
+        protected override void OnDisable()
+        {
+            MsgController.Instance.GetEats -= DataChanged;
+            MsgController.Instance.GetDiapers -= DataChanged;
+            MsgController.Instance.B_AddEat -= DataChanged;
+            MsgController.Instance.B_DelEat -= DataChanged;
+            MsgController.Instance.B_AddDiaper -= DataChanged;
+            MsgController.Instance.B_DelDiaper -= DataChanged;
+            base.OnDisable();
+        }
+
+        private void DataChanged()
+        {
+            SetData(_dataKind, _filter);
+            ReloadData(true);
+        }
+
+        public void SetData(int dataKind, string filter)
+        {
+            _dataKind = dataKind;
+            _filter = filter;
             _cells.Clear();
 
-            if (dropDownValue == 0 || dropDownValue == 1)
+            if (dataKind == 0 || dataKind == 1)
             {
-                _cells.AddRange(StaticData.Eats.Select(s=>
-                    new MainVerticalScrollViewCell(
-                        "Eat", 
-                        s.DrinkType, 
-                        s.Ml.ToString(), 
-                        s.Time.ToString())));
+                _cells.AddRange(StaticData.Eats
+                    .Where(s => filter == ALL || filter == s.DrinkType)
+                    .Select(s => new MainVerticalScrollViewCell(s)));
             }
-            if (dropDownValue == 0 || dropDownValue == 2)
+            if (dataKind == 0 || dataKind == 2)
             {
-                _cells.AddRange(StaticData.Diapers.Select(s =>
-                    new MainVerticalScrollViewCell(
-                        "Eat",
-                        s.ExcreteType,
-                        s.Mg.ToString(),
-                        s.Time.ToString())));
+                _cells.AddRange(StaticData.Diapers
+                    .Where(s => filter == ALL || filter == s.ExcreteType)
+                    .Select(s => new MainVerticalScrollViewCell(s)));
             }
+
+            _cells.Sort((s1, s2) => (int)(s2.Time / 1000 - s1.Time / 1000));
         }
     }
 }
