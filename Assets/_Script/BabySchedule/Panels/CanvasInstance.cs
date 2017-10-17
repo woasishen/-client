@@ -1,5 +1,4 @@
-﻿using UnityEditor.iOS;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BabySchedule.Panels
 {

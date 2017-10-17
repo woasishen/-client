@@ -15,7 +15,8 @@ namespace TcpConnect
         static TcpInstance()
         {
             //Socket = new TcpSocket("111.206.45.12", 30021);
-            Socket = new TcpSocket("192.168.1.3", 18080);
+            //Socket = new TcpSocket("192.168.1.3", 18080);
+			Socket = new TcpSocket("192.168.0.250", 18080);
 
             Socket.ErrAction += s => Debug.LogError(@"Err:" + s);
             Socket.ErrorAction += s => Debug.LogError(@"Error:" + s);
