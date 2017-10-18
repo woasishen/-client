@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Local
@@ -30,13 +31,13 @@ namespace TcpConnect.ServerInterface
         /// server error
         /// </summary>
         [JsonProperty(@"err")]
-        internal object Err { get; private set; }
+        internal string Err { get; private set; }
 
         /// <summary>
         /// normal error
         /// </summary>
         [JsonProperty(@"error")]
-        internal object Error { get; private set; }
+        internal string Error { get; private set; }
 
         /// <summary>
         /// sucess
@@ -115,6 +116,7 @@ namespace TcpConnect.ServerInterface
     public class ServerMsgAction
     {
         private readonly Dictionary<ServerMsgId, bool> _isDirty = new Dictionary<ServerMsgId, bool>();
+        private readonly Dictionary<ServerMsgId, string> _msgErrorDict = new Dictionary<ServerMsgId, string>();
 
         private static readonly Dictionary<ServerMsgId, MethodInfo> MsgAction = 
             new Dictionary<ServerMsgId, MethodInfo>();
@@ -133,7 +135,24 @@ namespace TcpConnect.ServerInterface
             }
         }
 
-        public void HandleMsg(ServerMsgId id, object[] args)
+        public void HandleNormalMsg(ServerMsgId id, object[] args)
+        {
+            if (MsgAction.ContainsKey(id))
+            {
+                var msgBase = (ServerMsgBase) args[0];
+                if (msgBase.Succeed)
+                {
+                    MsgAction[id].Invoke(this, args);
+                }
+                else
+                {
+                    _msgErrorDict[id] = msgBase.Err + msgBase.Error;
+                }
+            }
+            _isDirty[id] = true;
+        }
+
+        public void HandleBMsg(ServerMsgId id, object[] args)
         {
             if (MsgAction.ContainsKey(id))
             {
@@ -151,9 +170,19 @@ namespace TcpConnect.ServerInterface
             return false;
         }
 
-        public void ClearDirty(ServerMsgId id)
+        public string GetMsgError(ServerMsgId id)
+        {
+            if (_msgErrorDict.ContainsKey(id))
+            {
+                return _msgErrorDict[id];
+            }
+            return null;
+        }
+
+        public void ClearDirtyAndErr(ServerMsgId id)
         {
             _isDirty[id] = false;
+            _msgErrorDict.Remove(id);
         }
 
         [ServerId(ServerMsgId.get_eatsc)]

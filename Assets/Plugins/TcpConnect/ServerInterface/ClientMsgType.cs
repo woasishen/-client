@@ -121,13 +121,13 @@ namespace TcpConnect.ServerInterface
             {
                 get { return ClientMsgId.del_eat; }
             }
-            public DelEat(int curLength)
+            public DelEat(int curStop)
             {
-                CurLength = curLength;
+                Stop = curStop;
             }
 
-            [JsonProperty(@"length")]
-            public int CurLength { get; private set; }
+            [JsonProperty(@"stop")]
+            public int Stop { get; private set; }
         }
 
         public class DelDiaper : ClientMsgBase
@@ -136,13 +136,13 @@ namespace TcpConnect.ServerInterface
             {
                 get { return ClientMsgId.del_diaper; }
             }
-            public DelDiaper(int curLength)
+            public DelDiaper(int curStop)
             {
-                CurLength = curLength;
+                Stop = curStop;
             }
 
-            [JsonProperty(@"length")]
-            public int CurLength { get; private set; }
+            [JsonProperty(@"stop")]
+            public int Stop { get; private set; }
         }
     }
 
@@ -192,13 +192,13 @@ namespace TcpConnect.ServerInterface
 
         public void DelEat()
         {
-            var msg = new ClientMsgType.DelEat(StaticData.Eats.Count);
+            var msg = new ClientMsgType.DelEat(StaticData.Eats.Stop);
             _sendQueue.Enqueue(msg);
         }
 
         public void DelDiaper()
         {
-            var msg = new ClientMsgType.DelDiaper(StaticData.Diapers.Count);
+            var msg = new ClientMsgType.DelDiaper(StaticData.Diapers.Stop);
             _sendQueue.Enqueue(msg);
         }
     }

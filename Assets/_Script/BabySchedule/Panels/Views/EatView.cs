@@ -19,24 +19,6 @@ namespace BabySchedule.Panels.Views
             _ml = transform.Find("Ml").GetComponentInChildren<InputField>();
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            MsgController.Instance.AddEats += AddEats;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            MsgController.Instance.AddEats -= AddEats;
-        }
-
-        private void AddEats()
-        {
-            CanvasInstance.Instance.HideWaitting();
-            Exit();
-        }
-
         private void ConfirmBtnClicked()
         {
             if (!_milkOrWater.AnyTogglesOn())
@@ -59,6 +41,7 @@ namespace BabySchedule.Panels.Views
                 ml
             );
             CanvasInstance.Instance.ShowWaitting();
+            Exit();
         }
     }
 }

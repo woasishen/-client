@@ -24,7 +24,7 @@ namespace BabySchedule.Panels.Main
             {
                 _lines.Add("吃");
                 _lines.Add(eat.DrinkType);
-                _lines.Add(eat.Ml.ToString());
+                _lines.Add(eat.Ml + "(ml)");
                 Time = eat.Time;
                 _lines.Add(CommonMethod.TickToTimeStr(Time));
             }
@@ -33,7 +33,7 @@ namespace BabySchedule.Panels.Main
             {
                 _lines.Add("排泄");
                 _lines.Add(diaper.ExcreteType);
-                _lines.Add(diaper.Mg.ToString());
+                _lines.Add(diaper.Mg + "(mg)");
                 Time = diaper.Time;
                 _lines.Add(CommonMethod.TickToTimeStr(Time));
             }
@@ -64,30 +64,13 @@ namespace BabySchedule.Panels.Main
             }
         }
 
-        protected override void OnEnable()
+        protected override void Awake()
         {
-            MsgController.Instance.GetEats += DataChanged;
-            MsgController.Instance.GetDiapers += DataChanged;
-            MsgController.Instance.B_AddEat += DataChanged;
-            MsgController.Instance.B_DelEat += DataChanged;
-            MsgController.Instance.B_AddDiaper += DataChanged;
-            MsgController.Instance.B_DelDiaper += DataChanged;
             SetData(_dataKind, _filter);
-            base.OnEnable();
+            base.Awake();
         }
 
-        protected override void OnDisable()
-        {
-            MsgController.Instance.GetEats -= DataChanged;
-            MsgController.Instance.GetDiapers -= DataChanged;
-            MsgController.Instance.B_AddEat -= DataChanged;
-            MsgController.Instance.B_DelEat -= DataChanged;
-            MsgController.Instance.B_AddDiaper -= DataChanged;
-            MsgController.Instance.B_DelDiaper -= DataChanged;
-            base.OnDisable();
-        }
-
-        private void DataChanged()
+        protected override void DataChanged()
         {
             SetData(_dataKind, _filter);
             ReloadData(true);

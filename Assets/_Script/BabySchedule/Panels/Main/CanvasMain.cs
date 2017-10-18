@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BabySchedule.Panels.Views;
 using PathologicalGames;
 using TcpConnect;
@@ -9,7 +11,7 @@ using Button = UnityEngine.UI.Button;
 
 namespace BabySchedule.Panels.Main
 {
-    public class CanvasMain : MonoBehaviourBase
+    public class CanvasMain : MonoBehaviourDateChange
     {
         private static readonly Dictionary<int, Dictionary<int, List<string>>> OPTIONS =
             new Dictionary<int, Dictionary<int, List<string>>>
@@ -37,16 +39,53 @@ namespace BabySchedule.Panels.Main
             };
 
         private const int DROP_DOWN_COUNT = 2;
+        private static TimeSpan _canDelTime = new TimeSpan(0, 0, 15, 0);
 
         private Button _diaperBtn;
         private Button _eatBtn;
+        private Button _delBtn;
+        private Coroutine _disableDelBtn;
         private MainVerticalScrollView _verticalScrollView;
 
         private List<Dropdown> _dropdowns;
 
+        protected override void DataChanged()
+        {
+            UpdateDelBtn();
+        }
+
+        private void UpdateDelBtn()
+        {
+            var lastAddTime = CommonMethod.GetLastAddItemTime();
+            if (lastAddTime == null)
+            {
+                _delBtn.gameObject.SetActive(false);
+                return;
+            }
+            var passedTime = DateTime.Now - lastAddTime.Value;
+            if (passedTime > _canDelTime)
+            {
+                _delBtn.gameObject.SetActive(false);
+                return;
+            }
+            _delBtn.gameObject.SetActive(true);
+            if (_disableDelBtn != null)
+            {
+                StopCoroutine(_disableDelBtn);
+            }
+            _disableDelBtn = StartCoroutine(DisableDelBtn(_canDelTime - passedTime));
+        }
+
+        private IEnumerator DisableDelBtn(TimeSpan span)
+        {
+            yield return new WaitForSeconds((float)span.TotalSeconds);
+            _delBtn.gameObject.SetActive(false);
+        }
+
         protected override void Awake()
         {
             base.Awake();
+
             _diaperBtn = transform.Find("Bottom/DiaperButton").GetComponent<Button>();
             _eatBtn = transform.Find("Bottom/EatButton").GetComponent<Button>();
 
@@ -65,6 +104,32 @@ namespace BabySchedule.Panels.Main
                 {
                     _dropdowns[i].gameObject.SetActive(false);
                 }
+            }
+            _delBtn = transform.Find("Top/ChoicePanel/DelFirstBtn").GetComponent<Button>();
+            UpdateDelBtn();
+            _delBtn.onClick.AddListener(DelLatelyAdd);
+        }
+
+        private void DelLatelyAdd()
+        {
+            CanvasInstance.Instance.ShowWaitting();
+            if (!StaticData.Eats.Any())
+            {
+                TcpInstance.Socket.SendMethod.DelDiaper();
+                return;
+            }
+            if (!StaticData.Diapers.Any())
+            {
+                TcpInstance.Socket.SendMethod.DelEat();
+                return;
+            }
+            if (StaticData.Diapers.Peek().Time > StaticData.Eats.Peek().Time)
+            {
+                TcpInstance.Socket.SendMethod.DelDiaper();
+            }
+            else
+            {
+                TcpInstance.Socket.SendMethod.DelEat();
             }
         }
 

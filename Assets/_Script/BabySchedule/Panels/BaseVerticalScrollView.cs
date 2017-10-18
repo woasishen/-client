@@ -17,7 +17,7 @@ namespace BabySchedule.Panels
         }
     }
 
-    public abstract class BaseVerticalScrollView : MonoBehaviourBase
+    public abstract class BaseVerticalScrollView : MonoBehaviourDateChange
     {
         enum FirstOrLast
         {
@@ -50,17 +50,13 @@ namespace BabySchedule.Panels
             _viewHeight = GetComponent<RectTransform>().rect.height;
 
             _showCellMaxCount = (int)Math.Ceiling(_viewHeight / _cellHeight) + 2;
+
+            ReloadData();
         }
 
-        protected override void OnEnable()
+        protected override void OnDestroy()
         {
-            base.OnEnable();
-            ReloadData(true);
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
+            base.OnDestroy();
             ClearItems();
         }
 

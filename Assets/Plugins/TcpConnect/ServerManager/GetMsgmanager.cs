@@ -64,29 +64,32 @@ namespace TcpConnect.ServerManager
 
             var serverMsgBase = (ServerMsgBase)JsonConvert.DeserializeObject(packet.Msg.ToString(), 
                 _msgTypeDict.ContainsKey(id) ? _msgTypeDict[id] : typeof(ServerMsgBase));
+            _serverMsgAction.HandleNormalMsg(id, new object[] {serverMsgBase});
             if (serverMsgBase.Err != null)
             {
                 //数据库内部错误
                 if (ErrAction != null)
                 {
-                    ErrAction.Invoke(serverMsgBase.Err.ToString());
+                    ErrAction.Invoke(serverMsgBase.Err);
                 }
                 return;
             }
             if (serverMsgBase.Error != null)
             {
-                if (ErrAction != null)
+                if (ErrorAction != null)
                 {
-                    ErrorAction.Invoke(serverMsgBase.Error.ToString());
+                    ErrorAction.Invoke(serverMsgBase.Error);
                 }
                 return;
             }
             if (!serverMsgBase.Succeed)
             {
-                NotSucceedAction.Invoke();
+                if (NotSucceedAction != null)
+                {
+                    NotSucceedAction.Invoke();
+                }
                 return;
             }
-            _serverMsgAction.HandleMsg(id, new object[]{ serverMsgBase });
         }
 
         private void HandleBroaderCastMsg(Packet packet)
@@ -97,7 +100,7 @@ namespace TcpConnect.ServerManager
                 ? JsonConvert.DeserializeObject(packet.Msg.ToString(), _broadcastMsgTypeDict[id])
                 : packet.Msg.ToString();
 
-            _serverMsgAction.HandleMsg(id, new[] { msg });
+            _serverMsgAction.HandleBMsg(id, new[] { msg });
         }
     }
 }

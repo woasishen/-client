@@ -21,24 +21,6 @@ namespace BabySchedule.Panels.Views
             _mg = transform.Find("Mg").GetComponentInChildren<InputField>();
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            MsgController.Instance.AddDiapers += AddDiapers;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            MsgController.Instance.AddDiapers -= AddDiapers;
-        }
-
-        private void AddDiapers()
-        {
-            CanvasInstance.Instance.HideWaitting();
-            Exit();
-        }
-
         private void ConfirmBtnClicked()
         {
             if (!_shitOrPee.AnyTogglesOn())
@@ -61,6 +43,7 @@ namespace BabySchedule.Panels.Views
                 mg
             );
             CanvasInstance.Instance.ShowWaitting();
+            Exit();
         }
     }
 }

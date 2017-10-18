@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using BabySchedule.Panels;
+using BabySchedule.Panels.Layers;
 using TcpConnect;
 using TcpConnect.ServerInterface;
 
@@ -55,8 +57,17 @@ namespace BabySchedule
             {
                 if (TcpInstance.Socket.MsgActions.IsDirty(keyValue.Key))
                 {
+                    if (!keyValue.Key.ToString().StartsWith("b_"))
+                    {
+                        CanvasInstance.Instance.HideWaitting();
+                    }
+                    var error = TcpInstance.Socket.MsgActions.GetMsgError(keyValue.Key);
+                    if (error != null)
+                    {
+                        MsgBox.Show(error);
+                    }
                     keyValue.Value.Invoke(this, new object[] { });
-                    TcpInstance.Socket.MsgActions.ClearDirty(keyValue.Key);
+                    TcpInstance.Socket.MsgActions.ClearDirtyAndErr(keyValue.Key);
                 }
             }
         }
