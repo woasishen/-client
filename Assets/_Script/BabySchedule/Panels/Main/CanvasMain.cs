@@ -39,7 +39,7 @@ namespace BabySchedule.Panels.Main
             };
 
         private const int DROP_DOWN_COUNT = 2;
-        private static TimeSpan _canDelTime = new TimeSpan(0, 0, 15, 0);
+        private static readonly TimeSpan canDelTime = new TimeSpan(0, 0, 15, 0);
 
         private Button _diaperBtn;
         private Button _eatBtn;
@@ -63,7 +63,7 @@ namespace BabySchedule.Panels.Main
                 return;
             }
             var passedTime = DateTime.Now - lastAddTime.Value;
-            if (passedTime > _canDelTime)
+            if (passedTime > canDelTime)
             {
                 _delBtn.gameObject.SetActive(false);
                 return;
@@ -73,7 +73,7 @@ namespace BabySchedule.Panels.Main
             {
                 StopCoroutine(_disableDelBtn);
             }
-            _disableDelBtn = StartCoroutine(DisableDelBtn(_canDelTime - passedTime));
+            _disableDelBtn = StartCoroutine(DisableDelBtn(canDelTime - passedTime));
         }
 
         private IEnumerator DisableDelBtn(TimeSpan span)
