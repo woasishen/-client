@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace BabySchedule.Panels
+﻿namespace BabySchedule.Panels
 {
     public static class UIHelper
     {

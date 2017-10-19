@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BabySchedule.Panels.Views;
-using PathologicalGames;
 using TcpConnect;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,7 +38,7 @@ namespace BabySchedule.Panels.Main
             };
 
         private const int DROP_DOWN_COUNT = 2;
-        private static readonly TimeSpan canDelTime = new TimeSpan(0, 0, 15, 0);
+        private static readonly TimeSpan CanDelTime = new TimeSpan(0, 0, 10, 0);
 
         private Button _diaperBtn;
         private Button _eatBtn;
@@ -63,7 +62,7 @@ namespace BabySchedule.Panels.Main
                 return;
             }
             var passedTime = DateTime.Now - lastAddTime.Value;
-            if (passedTime > canDelTime)
+            if (passedTime > CanDelTime)
             {
                 _delBtn.gameObject.SetActive(false);
                 return;
@@ -73,7 +72,7 @@ namespace BabySchedule.Panels.Main
             {
                 StopCoroutine(_disableDelBtn);
             }
-            _disableDelBtn = StartCoroutine(DisableDelBtn(canDelTime - passedTime));
+            _disableDelBtn = StartCoroutine(DisableDelBtn(CanDelTime - passedTime));
         }
 
         private IEnumerator DisableDelBtn(TimeSpan span)

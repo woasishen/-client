@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using TcpConnect.Socket;
-using UnityEngine;
 
 // ReSharper disable InconsistentNaming
 
