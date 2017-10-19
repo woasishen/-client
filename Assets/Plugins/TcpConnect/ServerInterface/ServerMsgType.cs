@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Local
@@ -214,7 +213,7 @@ namespace TcpConnect.ServerInterface
         [ServerId(ServerMsgId.b_del_eatc)]
         protected void OnBDelEat(BroadcastMsgType.DelEat obj)
         {
-            if (obj.Stop == StaticData.Eats.Stop)
+            if (obj.Stop == StaticData.Eats.Stop - 1)
             {
                 StaticData.Eats.Pop();
             }
@@ -222,7 +221,7 @@ namespace TcpConnect.ServerInterface
         [ServerId(ServerMsgId.b_del_diaperc)]
         protected void OnBDelDiaper(BroadcastMsgType.DelDiaper obj)
         {
-            if (obj.Stop == StaticData.Diapers.Stop)
+            if (obj.Stop == StaticData.Diapers.Stop - 1)
             {
                 StaticData.Diapers.Pop();
             }
