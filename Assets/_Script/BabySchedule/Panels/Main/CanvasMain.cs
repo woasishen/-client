@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BabySchedule.Panels.Layers;
 using BabySchedule.Panels.Views;
 using TcpConnect;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
@@ -75,8 +77,15 @@ namespace BabySchedule.Panels.Main
             _disableDelBtn = StartCoroutine(DisableDelBtn(CanDelTime - passedTime));
         }
 
+        public class Test: YieldInstruction
+        {
+            
+        }
+
         private IEnumerator DisableDelBtn(TimeSpan span)
         {
+            UnityWebRequest www = UnityWebRequest.Get("http://www.my-server.com");
+            yield return www.SendWebRequest();
             yield return new WaitForSeconds((float)span.TotalSeconds);
             _delBtn.gameObject.SetActive(false);
         }
@@ -106,11 +115,13 @@ namespace BabySchedule.Panels.Main
             }
             _delBtn = transform.Find("Top/ChoicePanel/DelFirstBtn").GetComponent<Button>();
             UpdateDelBtn();
-            _delBtn.onClick.AddListener(DelLatelyAdd);
+            _delBtn.onClick.AddListener(DelLastAdd);
         }
 
-        private void DelLatelyAdd()
+        private void DelLastAdd()
         {
+            MsgBox.Show();
+
             CanvasInstance.Instance.ShowWaitting();
             if (!StaticData.Eats.Any())
             {

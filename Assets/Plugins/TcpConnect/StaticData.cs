@@ -11,15 +11,8 @@ namespace TcpConnect
 
         }
 
-        private static IEnumerable<T> Reverse(List<T> list)
-        {
-            var result = list.ToList();
-            result.Reverse(0, result.Count);
-            return result;
-        }
-
         public Cache(List<T> data) 
-            : base(Reverse(data))
+            : base(data)
         {
         }
 
