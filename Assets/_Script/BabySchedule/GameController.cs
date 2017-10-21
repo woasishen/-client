@@ -9,8 +9,8 @@ namespace BabySchedule
         {
             base.Awake();
             DontDestroyOnLoad(gameObject);
-            TcpInstance.Socket.SendMethod.GetEat(0, 10);
-            TcpInstance.Socket.SendMethod.GetDiaper(0, 10);
+            TcpInstance.Socket.SendMethod.GetEat();
+            TcpInstance.Socket.SendMethod.GetDiaper();
         }
 
         protected override void OnDestroy()

@@ -24,8 +24,9 @@ namespace BabySchedule.Panels
         {
             base.Awake();
             Instance = this;
-            gameObject.AddComponent<UILayers>();
-            gameObject.AddComponent<UIViews>();
+            gameObject.AddComponent<MsgBox>();
+            gameObject.AddComponent<UiLayers>();
+            gameObject.AddComponent<UiViews>();
             _waitting = Instantiate(Resources.Load<GameObject>("Prefabs/Panels/Waitting"));
             _waitting.transform.SetParent(transform);
             _waitting.transform.localPosition = Vector3.zero;

@@ -9,9 +9,9 @@ namespace BabySchedule.Panels.Main
 {
     public class MainVerticalScrollView : BaseVerticalScrollView
     {
-        private const string ALL = "All";
+        private const string All = "All";
         private int _dataKind;
-        private string _filter = ALL;
+        private string _filter = All;
 
         private class MainVerticalScrollViewCell
         {
@@ -84,13 +84,13 @@ namespace BabySchedule.Panels.Main
             if (dataKind == 0 || dataKind == 1)
             {
                 _cells.AddRange(StaticData.Eats
-                    .Where(s => filter == ALL || filter == s.DrinkType)
+                    .Where(s => filter == All || filter == s.DrinkType)
                     .Select(s => new MainVerticalScrollViewCell(s)));
             }
             if (dataKind == 0 || dataKind == 2)
             {
                 _cells.AddRange(StaticData.Diapers
-                    .Where(s => filter == ALL || filter == s.ExcreteType)
+                    .Where(s => filter == All || filter == s.ExcreteType)
                     .Select(s => new MainVerticalScrollViewCell(s)));
             }
 

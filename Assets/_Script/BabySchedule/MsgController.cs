@@ -64,7 +64,7 @@ namespace BabySchedule
                     var error = TcpInstance.Socket.MsgActions.GetMsgError(keyValue.Key);
                     if (error != null)
                     {
-                        MsgBox.Show(error);
+                        MsgBox.Instance.Show(error);
                     }
                     keyValue.Value.Invoke(this, new object[] { });
                     TcpInstance.Socket.MsgActions.ClearDirtyAndErr(keyValue.Key);

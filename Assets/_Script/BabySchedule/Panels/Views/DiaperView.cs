@@ -22,7 +22,7 @@ namespace BabySchedule.Panels.Views
         {
             if (!_shitOrPee.AnyTogglesOn())
             {
-                MsgBox.Show("请勾选是否拉屎");
+                MsgBox.Instance.Show("请勾选是否拉屎");
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace BabySchedule.Panels.Views
 
             if (mg <= 0)
             {
-                MsgBox.Show("请填写尿不湿质量");
+                MsgBox.Instance.Show("请填写尿不湿质量");
                 return;
             }
 

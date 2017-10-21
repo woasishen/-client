@@ -22,7 +22,7 @@ namespace BabySchedule.Panels.Views
         {
             if (!_milkOrWater.AnyTogglesOn())
             {
-                MsgBox.Show("请勾选饮品");
+                MsgBox.Instance.Show("请勾选饮品");
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace BabySchedule.Panels.Views
 
             if (ml <= 0)
             {
-                MsgBox.Show("请填写ML");
+                MsgBox.Instance.Show("请填写ML");
                 return;
             }
 

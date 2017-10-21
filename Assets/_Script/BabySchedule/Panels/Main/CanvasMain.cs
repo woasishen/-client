@@ -12,7 +12,7 @@ namespace BabySchedule.Panels.Main
 {
     public class CanvasMain : MonoBehaviourDateChange
     {
-        private static readonly Dictionary<int, Dictionary<int, List<string>>> OPTIONS =
+        private static readonly Dictionary<int, Dictionary<int, List<string>>> Options =
             new Dictionary<int, Dictionary<int, List<string>>>
             {
                 {
@@ -37,7 +37,7 @@ namespace BabySchedule.Panels.Main
                 }
             };
 
-        private const int DROP_DOWN_COUNT = 2;
+        private const int DropDownCount = 2;
         private static readonly TimeSpan CanDelTime = new TimeSpan(0, 0, 10, 0);
 
         private Button _diaperBtn;
@@ -94,7 +94,7 @@ namespace BabySchedule.Panels.Main
             _eatBtn.onClick.AddListener(EatBtnClicked);
 
             _dropdowns = new List<Dropdown>();
-            for (int i = 0; i < DROP_DOWN_COUNT; i++)
+            for (int i = 0; i < DropDownCount; i++)
             {
                 _dropdowns.Add(transform.Find("Top/ChoicePanel/Dropdown" + i).GetComponent<Dropdown>());
                 var index = i;
@@ -106,21 +106,28 @@ namespace BabySchedule.Panels.Main
             }
             _delBtn = transform.Find("Top/ChoicePanel/DelFirstBtn").GetComponent<Button>();
             UpdateDelBtn();
-            _delBtn.onClick.AddListener(DelLatelyAdd);
+            _delBtn.onClick.AddListener(() => StartCoroutine(DelLatelyAdd()));
         }
 
-        private void DelLatelyAdd()
+        private IEnumerator DelLatelyAdd()
         {
+            var msgBox = MsgBox.Instance.Show("Waring", "确认要删除吗？", MsgBoxStyle.YesNo);
+            yield return msgBox;
+            if (msgBox.Result != MsgBoxResult.Yes)
+            {
+                yield break;
+            }
+
             CanvasInstance.Instance.ShowWaitting();
             if (!StaticData.Eats.Any())
             {
                 TcpInstance.Socket.SendMethod.DelDiaper();
-                return;
+                yield break;
             }
             if (!StaticData.Diapers.Any())
             {
                 TcpInstance.Socket.SendMethod.DelEat();
-                return;
+                yield break;
             }
             if (StaticData.Diapers.Peek().Time > StaticData.Eats.Peek().Time)
             {
@@ -136,7 +143,7 @@ namespace BabySchedule.Panels.Main
         {
             if (index == 0)
             {
-                for (int i = 1; i < DROP_DOWN_COUNT; i++)
+                for (int i = 1; i < DropDownCount; i++)
                 {
                     _dropdowns[i].value = 0;
                     _dropdowns[i].gameObject.SetActive(arg != 0);
@@ -145,7 +152,7 @@ namespace BabySchedule.Panels.Main
                         continue;
                     }
                     _dropdowns[i].options.RemoveRange(1, _dropdowns[i].options.Count - 1);
-                    _dropdowns[i].AddOptions(OPTIONS[i][arg]);
+                    _dropdowns[i].AddOptions(Options[i][arg]);
                 }
             }
 
@@ -155,12 +162,12 @@ namespace BabySchedule.Panels.Main
 
         private void EatBtnClicked()
         {
-            UIViews.Instance.ShowView<EatView>();
+            UiViews.Instance.ShowView<EatView>();
         }
 
         private void DiaperBtnClicked()
         {
-            UIViews.Instance.ShowView<DiaperView>();
+            UiViews.Instance.ShowView<DiaperView>();
         }
     }
 }

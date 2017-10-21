@@ -42,7 +42,7 @@ namespace TcpConnect.ServerInterface
 
             public GetEats()
             {
-                Stop = 9;
+                Stop = 100;
             }
 
             [JsonProperty(@"start")]
@@ -66,7 +66,7 @@ namespace TcpConnect.ServerInterface
 
             public GetDiapers()
             {
-                Stop = 9;
+                Stop = 100;
             }
 
             [JsonProperty(@"start")]
