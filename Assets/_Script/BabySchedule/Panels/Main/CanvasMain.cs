@@ -111,7 +111,7 @@ namespace BabySchedule.Panels.Main
 
         private IEnumerator DelLatelyAdd()
         {
-            var msgBox = MsgBox.Instance.Show("Waring", "确认要删除吗？", MsgBoxStyle.YesNo);
+            var msgBox = MsgBox.Instance.ShowWarn("确认要删除吗？", MsgBoxStyle.YesNo);
             yield return msgBox;
             if (msgBox.Result != MsgBoxResult.Yes)
             {
@@ -162,12 +162,12 @@ namespace BabySchedule.Panels.Main
 
         private void EatBtnClicked()
         {
-            UiViews.Instance.ShowView<EatView>();
+            UIViews.Instance.ShowView<EatView>();
         }
 
         private void DiaperBtnClicked()
         {
-            UiViews.Instance.ShowView<DiaperView>();
+            UIViews.Instance.ShowView<DiaperView>();
         }
     }
 }

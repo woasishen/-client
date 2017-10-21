@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace BabySchedule.Panels
 {
-    public class UiViews : MonoBehaviourBase
+    public class UIViews : MonoBehaviourBase
     {
-        public static UiViews Instance { get; private set; }
+        public static UIViews Instance { get; private set; }
 
         public GameObject Views { get; private set; }
 

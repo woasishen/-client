@@ -1,6 +1,6 @@
 ﻿namespace BabySchedule.Panels
 {
-    public static class UiHelper
+    public static class UIHelper
     {
     }
 }

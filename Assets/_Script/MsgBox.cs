@@ -24,13 +24,16 @@ public enum MsgBoxStyle
 public class MsgBox : MonoBehaviourBase
 {
     private const string PerfabPath = "MsgBox/MsgBox";
+    private const string WarnPerfabPath = "MsgBox/MsgBoxWarn";
     private const string BtnPerfabPath = "MsgBox/MsgBtn";
 
     private const string BtnRootPath = "Panel/BtnRoot";
+    private const string BtnRootLinePath = "Panel/BtnRoot/Line";
     private const string TitlePath = "Panel/Title";
     private const string ContentPath = "Panel/Content";
 
     private GameObject _perfab;
+    private GameObject _warnPerfab;
     private GameObject _btnPerfab;
 
     public static MsgBox Instance { get; private set; }
@@ -39,7 +42,18 @@ public class MsgBox : MonoBehaviourBase
     {
         Instance = this;
         _perfab = Resources.Load<GameObject>(PerfabPath);
+        _warnPerfab = Resources.Load<GameObject>(WarnPerfabPath);
         _btnPerfab = Resources.Load<GameObject>(BtnPerfabPath);
+    }
+
+    public BoxAsyn ShowWarn(string msg, MsgBoxStyle style = MsgBoxStyle.Ok)
+    {
+        return ShowWarn("警告", msg, style);
+    }
+
+    public BoxAsyn ShowWarn(string title, string content, MsgBoxStyle style = MsgBoxStyle.Ok)
+    {
+        return ShoBox(Instantiate(_warnPerfab), title, content, style);
     }
 
     public BoxAsyn Show(string msg, MsgBoxStyle style = MsgBoxStyle.Ok)
@@ -49,7 +63,11 @@ public class MsgBox : MonoBehaviourBase
 
     public BoxAsyn Show(string title, string content, MsgBoxStyle style = MsgBoxStyle.Ok)
     {
-        var boxObj = Instantiate(_perfab);
+        return ShoBox(Instantiate(_perfab), title, content, style);
+    }
+
+    private BoxAsyn ShoBox(GameObject boxObj, string title, string content, MsgBoxStyle style)
+    {
         boxObj.transform.SetParent(transform);
         boxObj.transform.localPosition = Vector3.zero;
         boxObj.transform.localScale = Vector3.one;
@@ -61,7 +79,12 @@ public class MsgBox : MonoBehaviourBase
         boxObj.transform.Find(ContentPath).GetComponent<Text>().text = content;
 
         var btnRoot = boxObj.transform.Find(BtnRootPath);
-
+        var btnLines = new Transform[3];
+        for (int i = 0; i < 3; i++)
+        {
+            btnLines[i] = boxObj.transform.Find(BtnRootLinePath + (i + 1));
+            btnLines[i].gameObject.SetActive(false);
+        }
         List<GameObject> btns = new List<GameObject>();
         switch (style)
         {
@@ -122,6 +145,7 @@ public class MsgBox : MonoBehaviourBase
                 btns.Add(cancelBtn4);
                 break;
         }
+
         switch (btns.Count)
         {
             case 1:
@@ -130,11 +154,14 @@ public class MsgBox : MonoBehaviourBase
             case 2:
                 btns[0].transform.localPosition = new Vector3(-150, 0);
                 btns[1].transform.localPosition = new Vector3(150, 0);
+                btnLines[1].gameObject.SetActive(true);
                 break;
             case 3:
                 btns[0].transform.localPosition = new Vector3(-250, 0);
                 btns[1].transform.localPosition = new Vector3(0, 0);
                 btns[2].transform.localPosition = new Vector3(250, 0);
+                btnLines[0].gameObject.SetActive(true);
+                btnLines[2].gameObject.SetActive(true);
                 break;
         }
 
@@ -144,20 +171,13 @@ public class MsgBox : MonoBehaviourBase
 
     public class BoxAsyn : IEnumerator
     {
-        private const string CloseBtnPath = "Panel/CloseBtn";
-
         private readonly GameObject _boxObj;
         public MsgBoxResult Result { get; private set; }
 
         public BoxAsyn(GameObject boxObj, List<GameObject> btns)
         {
             _boxObj = boxObj;
-            _boxObj.transform.Find(CloseBtnPath).GetComponent<Button>().onClick.AddListener(() =>
-            {
-                Result = MsgBoxResult.Cancel;
-                _boxObj.SetActive(false);
-            });
-
+            _boxObj.SetActive(true);
             for (int i = 0; i < btns.Count; i++)
             {
                 var str = btns[i].name;
@@ -172,7 +192,12 @@ public class MsgBox : MonoBehaviourBase
 
         public bool MoveNext()
         {
-            return _boxObj.activeSelf;
+            if (_boxObj.activeSelf)
+            {
+                return true;
+            }
+            Destroy(_boxObj);
+            return false;
         }
 
         public void Reset()

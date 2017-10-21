@@ -26,7 +26,7 @@ namespace BabySchedule.Panels.Layers.Base
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (UiLayers.Instance.Layers.transform.childCount == 0)
+            if (UILayers.Instance.Layers.transform.childCount == 0)
             {
                 Debug.LogError("LayerBg has no child");
                 gameObject.SetActive(false);
@@ -37,7 +37,7 @@ namespace BabySchedule.Panels.Layers.Base
                 return;
             }
             Enable = false;
-            UiLayers.Instance.Layers.GetComponentInChildren<Animator>().SetTrigger("Exit");
+            UILayers.Instance.Layers.GetComponentInChildren<Animator>().SetTrigger("Exit");
         }
     }
 }
